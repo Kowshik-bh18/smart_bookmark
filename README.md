@@ -1,4 +1,6 @@
+<div align="center">
 # SmartMark - Intelligent Bookmark Management
+</div>
 
 <div align="center">
 
@@ -22,6 +24,22 @@ Organize, search, and manage bookmarks with a professional interface, secure aut
 SmartMark is a full-stack bookmark management application designed for productivity, knowledge organization, and seamless access across devices. It integrates secure Google authentication, cloud database storage, responsive UI design, and real-time updates.
 
 The project focuses on simplicity, performance, security, and modern UI experience.
+
+---
+
+## Screenshots
+
+<div align="center">
+
+### Login Page
+<img src="images/login.png" width="800"/>
+
+<br><br>
+
+### Dashboard Page
+<img src="images/dashboard.png" width="800"/>
+
+</div>
 
 ---
 
@@ -121,6 +139,390 @@ http://localhost:3000
 * Netlify optional deployment
 
 ---
+
+# Architecture Diagrams
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        A[Web Browser] -->|HTTPS| B[Next.js App]
+        B --> C[Landing Page]
+        B --> D[Dashboard]
+        B --> E[Auth Pages]
+    end
+    
+    subgraph "Application Layer"
+        C -->|Google OAuth| F[Supabase Auth]
+        D -->|API Calls| G[Supabase Client]
+        E -->|Session Check| F
+    end
+    
+    subgraph "Backend Services - Supabase"
+        F -->|JWT Tokens| H[Authentication]
+        G -->|REST API| I[PostgreSQL Database]
+        H -->|User Sessions| I
+        I -->|Real-time| J[Realtime Engine]
+        J -->|WebSocket| D
+    end
+    
+    subgraph "External Services"
+        F -->|OAuth 2.0| K[Google Identity]
+        D -->|Favicon API| L[Google Favicon Service]
+    end
+    
+    style A fill:#667eea,stroke:#764ba2,color:#fff
+    style B fill:#61dafb,stroke:#000,color:#000
+    style I fill:#3ecf8e,stroke:#000,color:#fff
+    style K fill:#4285f4,stroke:#000,color:#fff
+```
+
+## 📊 Data Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant B as Browser
+    participant N as Next.js
+    participant S as Supabase
+    participant G as Google OAuth
+    participant D as Database
+
+    U->>B: Visit SmartMark
+    B->>N: Load Landing Page
+    N->>B: Display Login UI
+    
+    U->>B: Click "Continue with Google"
+    B->>N: Initiate OAuth
+    N->>S: Request OAuth URL
+    S->>G: Redirect to Google
+    G->>U: Google Login Page
+    U->>G: Enter Credentials
+    G->>S: OAuth Callback
+    S->>D: Create/Update User
+    S->>N: Return Session Token
+    N->>B: Redirect to Dashboard
+    
+    U->>B: Add Bookmark
+    B->>N: Submit URL
+    N->>S: Insert Bookmark
+    S->>D: Save to Database
+    D->>S: Confirm Save
+    S-->>N: Real-time Update
+    N->>B: Display New Bookmark
+```
+
+## 🗄️ Database Schema
+
+```mermaid
+erDiagram
+    users ||--o{ bookmarks : owns
+    
+    users {
+        uuid id PK
+        string email
+        string name
+        string avatar_url
+        timestamp created_at
+        timestamp last_sign_in
+    }
+    
+    bookmarks {
+        bigint id PK
+        uuid user_id FK
+        text url
+        text title
+        text description
+        text[] tags
+        timestamp created_at
+        timestamp updated_at
+    }
+```
+
+## 🔄 Component Architecture
+
+```mermaid
+graph LR
+    subgraph "Pages"
+        A[page.js<br/>Landing] 
+        B[bookmarks/page.js<br/>Dashboard]
+    end
+    
+    subgraph "Shared Components"
+        C[Modal Component]
+        D[Navigation]
+        E[Footer]
+    end
+    
+    subgraph "Features"
+        F[Auth Flow]
+        G[Bookmark CRUD]
+        H[Search & Filter]
+        I[View Toggle]
+    end
+    
+    subgraph "Services"
+        J[Supabase Client]
+        K[Auth Service]
+        L[Database Service]
+    end
+    
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    
+    B --> D
+    B --> G
+    B --> H
+    B --> I
+    
+    F --> K
+    G --> L
+    H --> L
+    I --> B
+    
+    K --> J
+    L --> J
+    
+    style A fill:#667eea,stroke:#764ba2,color:#fff
+    style B fill:#667eea,stroke:#764ba2,color:#fff
+    style J fill:#3ecf8e,stroke:#000,color:#fff
+```
+
+## 🔐 Authentication Flow
+
+```mermaid
+flowchart TD
+    A[User Visits Site] --> B{Authenticated?}
+    B -->|No| C[Show Landing Page]
+    B -->|Yes| D[Redirect to Dashboard]
+    
+    C --> E[Click 'Continue with Google']
+    E --> F[Redirect to Google OAuth]
+    F --> G[User Grants Permission]
+    G --> H[Google Returns to Callback]
+    H --> I[Supabase Creates Session]
+    I --> J[Store JWT Token]
+    J --> D
+    
+    D --> K[Load User Bookmarks]
+    K --> L[Subscribe to Realtime]
+    L --> M[Display Dashboard]
+    
+    M --> N{User Action}
+    N -->|Add Bookmark| O[Insert to DB]
+    N -->|Delete Bookmark| P[Remove from DB]
+    N -->|Search| Q[Filter Locally]
+    N -->|Logout| R[Clear Session]
+    
+    O --> L
+    P --> L
+    R --> C
+    
+    style C fill:#667eea,stroke:#764ba2,color:#fff
+    style D fill:#4ade80,stroke:#000,color:#000
+    style I fill:#3ecf8e,stroke:#000,color:#fff
+```
+
+## 📱 Application State Flow
+
+```mermaid
+stateDiagram-v2
+    [*] --> Unauthenticated
+    
+    Unauthenticated --> Authenticating: Click Login
+    Authenticating --> Authenticated: Success
+    Authenticating --> Unauthenticated: Failed
+    
+    Authenticated --> LoadingBookmarks: Fetch Data
+    LoadingBookmarks --> DisplayingBookmarks: Data Loaded
+    
+    DisplayingBookmarks --> Searching: User Types
+    DisplayingBookmarks --> AddingBookmark: Click Add
+    DisplayingBookmarks --> DeletingBookmark: Click Delete
+    DisplayingBookmarks --> TogglingView: Change View
+    
+    Searching --> DisplayingBookmarks: Clear Search
+    AddingBookmark --> DisplayingBookmarks: Bookmark Added
+    DeletingBookmark --> DisplayingBookmarks: Bookmark Deleted
+    TogglingView --> DisplayingBookmarks: View Changed
+    
+    DisplayingBookmarks --> Unauthenticated: Logout
+    Unauthenticated --> [*]
+```
+
+## 🌐 Deployment Architecture
+
+```mermaid
+graph TB
+    subgraph "User Devices"
+        A1[Desktop Browser]
+        A2[Mobile Browser]
+        A3[Tablet Browser]
+    end
+    
+    subgraph "CDN Layer"
+        B[Vercel Edge Network]
+    end
+    
+    subgraph "Application Layer"
+        C[Next.js Server<br/>SSR/SSG]
+        D[Static Assets]
+    end
+    
+    subgraph "Backend - Supabase Cloud"
+        E[Auth Service]
+        F[Database<br/>PostgreSQL]
+        G[Realtime Service]
+        H[Storage]
+    end
+    
+    subgraph "External APIs"
+        I[Google OAuth]
+        J[Google Favicon API]
+    end
+    
+    A1 --> B
+    A2 --> B
+    A3 --> B
+    
+    B --> C
+    B --> D
+    
+    C --> E
+    C --> F
+    C --> G
+    C --> H
+    
+    E --> I
+    C --> J
+    
+    style B fill:#000,stroke:#fff,color:#fff
+    style C fill:#61dafb,stroke:#000,color:#000
+    style F fill:#3ecf8e,stroke:#000,color:#fff
+    style I fill:#4285f4,stroke:#000,color:#fff
+```
+
+## 🔄 Real-time Synchronization
+
+```mermaid
+sequenceDiagram
+    participant U1 as User 1 Browser
+    participant U2 as User 2 Browser
+    participant S as Supabase Server
+    participant D as PostgreSQL DB
+    participant R as Realtime Engine
+
+    U1->>S: Subscribe to 'bookmarks' channel
+    U2->>S: Subscribe to 'bookmarks' channel
+    S->>R: Register subscriptions
+    
+    U1->>S: Add new bookmark
+    S->>D: INSERT bookmark
+    D->>S: Confirm insertion
+    D->>R: Trigger change event
+    
+    R->>U1: Broadcast: New bookmark
+    R->>U2: Broadcast: New bookmark
+    
+    U1->>U1: Update UI (own device)
+    U2->>U2: Update UI (other device)
+    
+    Note over U1,U2: All devices stay in sync!
+```
+
+## 🎯 Feature Integration Map
+
+```mermaid
+mindmap
+  root((SmartMark))
+    Authentication
+      Google OAuth
+      Session Management
+      Auto Redirect
+    Bookmarks
+      Add URL
+      Delete
+      Real-time Sync
+      Favicon Display
+    Search & Filter
+      Live Search
+      URL Matching
+      Results Count
+    UI Features
+      Grid View
+      List View
+      Modals
+      Animations
+    Analytics
+      Total Count
+      Today's Count
+      Usage Stats
+```
+
+## 🔒 Security Architecture
+
+```mermaid
+graph TB
+    subgraph "Security Layers"
+        A[HTTPS Encryption]
+        B[OAuth 2.0]
+        C[JWT Tokens]
+        D[Row Level Security]
+        E[Environment Variables]
+    end
+    
+    subgraph "Client Side"
+        F[Browser] --> A
+        A --> G[Next.js App]
+        G --> B
+    end
+    
+    subgraph "Authentication"
+        B --> H[Google Identity]
+        B --> C
+        C --> I[Supabase Auth]
+    end
+    
+    subgraph "Database"
+        I --> D
+        D --> J[PostgreSQL]
+        J --> K[User's Data Only]
+    end
+    
+    subgraph "Configuration"
+        E --> G
+        E --> I
+    end
+    
+    style A fill:#4ade80,stroke:#000,color:#000
+    style D fill:#f5576c,stroke:#000,color:#fff
+    style C fill:#667eea,stroke:#000,color:#fff
+```
+
+## 📈 Performance Optimization
+
+```mermaid
+graph LR
+    subgraph "Optimization Strategies"
+        A[Next.js SSG] --> B[Fast Initial Load]
+        C[CDN Delivery] --> D[Global Distribution]
+        E[Lazy Loading] --> F[Reduced Bundle]
+        G[Real-time WS] --> H[Instant Updates]
+        I[Client Cache] --> J[Fewer API Calls]
+    end
+    
+    style B fill:#4ade80,stroke:#000,color:#000
+    style D fill:#4ade80,stroke:#000,color:#000
+    style F fill:#4ade80,stroke:#000,color:#000
+    style H fill:#4ade80,stroke:#000,color:#000
+    style J fill:#4ade80,stroke:#000,color:#000
+```
+
+---
+
 
 ## Database Setup (Supabase)
 
@@ -378,11 +780,16 @@ The software is provided "as is", without warranty of any kind.
 
 ## Contact
 
-Email: [kowshikbh18@gmail.com](mailto:kowshikbh18@gmail.com)
+<div align="center">
 
-GitHub Repository:
+### **Kowshik BH**
 
-https://github.com/yourusername/smartmark
+[![Email](https://img.shields.io/badge/Email-kowshikbh18%40gmail.com-red?style=for-the-badge&logo=gmail)](mailto:kowshikbh18@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Kowshik%20BH-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/kowshikbh)
+[![GitHub](https://img.shields.io/badge/GitHub-Kowshik--bh18-black?style=for-the-badge&logo=github)](https://github.com/Kowshik-bh18)
+
+</div>
+
 
 ---
 
