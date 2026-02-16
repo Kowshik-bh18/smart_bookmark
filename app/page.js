@@ -30,7 +30,7 @@ export default function Home() {
     try {
       await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: "http://localhost:3000/bookmarks" },
+        options: { redirectTo: `${window.location.origin}/bookmarks` },
       });
     } catch (error) {
       setIsLoading(false);
