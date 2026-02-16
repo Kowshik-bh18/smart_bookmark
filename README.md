@@ -1,5 +1,7 @@
 <div align="center">
-# SmartMark - Intelligent Bookmark Management
+
+# SmartMark – Intelligent Bookmark Management
+
 </div>
 
 <div align="center">
@@ -32,12 +34,12 @@ The project focuses on simplicity, performance, security, and modern UI experien
 <div align="center">
 
 ### Login Page
-<img src="images/login.png" width="800"/>
+<img src="images/dashboard.png" width="800"/>
 
 <br><br>
 
 ### Dashboard Page
-<img src="images/dashboard.png" width="800"/>
+<img src="images/login.png" width="800"/>
 
 </div>
 
@@ -142,7 +144,7 @@ http://localhost:3000
 
 # Architecture Diagrams
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TB
@@ -178,7 +180,7 @@ graph TB
     style K fill:#4285f4,stroke:#000,color:#fff
 ```
 
-## 📊 Data Flow Diagram
+##  Data Flow Diagram
 
 ```mermaid
 sequenceDiagram
@@ -213,7 +215,7 @@ sequenceDiagram
     N->>B: Display New Bookmark
 ```
 
-## 🗄️ Database Schema
+## Database Schema
 
 ```mermaid
 erDiagram
@@ -240,7 +242,7 @@ erDiagram
     }
 ```
 
-## 🔄 Component Architecture
+## Component Architecture
 
 ```mermaid
 graph LR
@@ -291,7 +293,7 @@ graph LR
     style J fill:#3ecf8e,stroke:#000,color:#fff
 ```
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
 ```mermaid
 flowchart TD
@@ -326,7 +328,7 @@ flowchart TD
     style I fill:#3ecf8e,stroke:#000,color:#fff
 ```
 
-## 📱 Application State Flow
+## Application State Flow
 
 ```mermaid
 stateDiagram-v2
@@ -353,7 +355,7 @@ stateDiagram-v2
     Unauthenticated --> [*]
 ```
 
-## 🌐 Deployment Architecture
+## Deployment Architecture
 
 ```mermaid
 graph TB
@@ -405,7 +407,7 @@ graph TB
     style I fill:#4285f4,stroke:#000,color:#fff
 ```
 
-## 🔄 Real-time Synchronization
+## Real-time Synchronization
 
 ```mermaid
 sequenceDiagram
@@ -433,7 +435,7 @@ sequenceDiagram
     Note over U1,U2: All devices stay in sync!
 ```
 
-## 🎯 Feature Integration Map
+## Feature Integration Map
 
 ```mermaid
 mindmap
@@ -462,7 +464,7 @@ mindmap
       Usage Stats
 ```
 
-## 🔒 Security Architecture
+## Security Architecture
 
 ```mermaid
 graph TB
@@ -502,7 +504,7 @@ graph TB
     style C fill:#667eea,stroke:#000,color:#fff
 ```
 
-## 📈 Performance Optimization
+## Performance Optimization
 
 ```mermaid
 graph LR
