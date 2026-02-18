@@ -1,4 +1,4 @@
-
+<div align="center">
 # SmartMark – Intelligent Bookmark Management
 
 </div>
