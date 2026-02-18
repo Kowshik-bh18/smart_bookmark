@@ -1,4 +1,3 @@
-<img width="640" height="203" alt="image" src="https://github.com/user-attachments/assets/03dcab2c-bb31-48ee-bb2e-7e418ba4a450" /><img width="640" height="203" alt="image" src="https://github.com/user-attachments/assets/03dcab2c-bb31-48ee-bb2e-7e418ba4a450" /><div align="center">
 
 # SmartMark – Intelligent Bookmark Management
 
