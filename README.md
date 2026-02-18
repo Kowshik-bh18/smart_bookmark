@@ -1,7 +1,4 @@
-<div align="center">
-# SmartMark – Intelligent Bookmark Management
-
-</div>
+<h2 align="center">SmartMark – Intelligent Bookmark Management</h2>
 
 <div align="center">
 
