@@ -1,4 +1,4 @@
-<div align="center">
+<img width="640" height="203" alt="image" src="https://github.com/user-attachments/assets/03dcab2c-bb31-48ee-bb2e-7e418ba4a450" /><img width="640" height="203" alt="image" src="https://github.com/user-attachments/assets/03dcab2c-bb31-48ee-bb2e-7e418ba4a450" /><div align="center">
 
 # SmartMark – Intelligent Bookmark Management
 
@@ -76,11 +76,9 @@ The project focuses on simplicity, performance, security, and modern UI experien
 
 ---
 
-## Live Demo
+## 🔴 Live Demo
 
-Production deployment:
-
-https://smart-bookmark-theta-nine.vercel.app
+👉 [![Live Demo](https://img.shields.io/badge/Live-Demo-green?style=flat-square)](https://smart-bookmark-theta-nine.vercel.app)
 
 ---
 
@@ -651,6 +649,56 @@ smartmark/
 ├── package.json
 └── README.md
 ```
+## Challenges Faced & Solutions
+
+During the development of SmartMark, several technical challenges were encountered. Below are the key issues and how they were addressed:
+
+### 1. Google OAuth Authentication Setup
+**Challenge:**  
+Configuring Google OAuth with Supabase required correct redirect URLs for both local development and production deployment.
+
+**Solution:**  
+Configured Supabase Auth settings properly, added authorized redirect URIs in Google Cloud Console, and ensured environment variables were correctly set for both development and Vercel deployment.
+
+---
+
+### 2. Row Level Security (RLS) Implementation
+**Challenge:**  
+Ensuring that each user could only access their own bookmarks while maintaining database security.
+
+**Solution:**  
+Enabled Row Level Security (RLS) in Supabase and implemented policies based on `auth.uid()` so users can only view, insert, update, or delete their own data.
+
+---
+
+### 3. Deployment Issues on Vercel
+**Challenge:**  
+Handling environment variables, OAuth redirects, and production configuration during deployment.
+
+**Solution:**  
+Configured environment variables in Vercel dashboard, updated redirect URLs, and verified Supabase API integration for production use.
+
+---
+
+### 4. Real-time Bookmark Updates
+**Challenge:**  
+Ensuring bookmark updates reflect instantly without page refresh.
+
+**Solution:**  
+Used Supabase real-time subscriptions to listen for database changes and update the UI dynamically.
+
+---
+
+### 5. UI/UX Improvements
+**Challenge:**  
+Creating a modern, responsive interface while maintaining performance.
+
+**Solution:**  
+Implemented gradient backgrounds, animations, responsive layout, and optimized component styling using modern CSS practices.
+
+---
+
+These challenges provided valuable experience in authentication systems, secure database handling, real-time application design, and deployment workflows.
 
 ---
 
